@@ -17,10 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path, include
-
+from emailwhiz_ui.views import register_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ui/', include('emailwhiz_ui.urls')),
-    path('', lambda request: redirect('login'))
+    path('', lambda request: redirect('login')),
+    path('register/', register_view, name='register')
 ]
