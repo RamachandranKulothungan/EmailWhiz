@@ -39,10 +39,10 @@ def register_view(request):
         # Create new user
         user = User.objects.create_user(username=username, email=email, password=password)
         user.save()
-        messages.success(request, "Registration successful!")
+        messages.success(request, "Registration successful! You can now log in.")
         
-        # Log the user in and redirect to add resume page
-        login(request, user)
-        return redirect('resume_form')
+        # Redirect to login page with success message
+        return redirect('login')  # Adjust the URL name if needed
     
     return render(request, 'register.html')
+
