@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'emailwhiz_ui',
+    'emailwhiz_api'
 ]
 
 MIDDLEWARE = [
