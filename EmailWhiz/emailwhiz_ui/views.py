@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 
 def add_resume(request):
-    return HttpResponse('Hello, World!')
+    return render(request, 'add_resume.html')
