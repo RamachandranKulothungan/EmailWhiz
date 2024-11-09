@@ -15,8 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.shortcuts import redirect
+from django.urls import path, include
+from emailwhiz_ui.views import register_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('ui/', include('emailwhiz_ui.urls')),
+    path('', lambda request: redirect('login')),
+    path('register/', register_view, name='register')
 ]
