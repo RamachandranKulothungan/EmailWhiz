@@ -2,8 +2,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-from django.http import HttpResponse
-from django.contrib.auth.models import User
 
 from emailwhiz_ui.forms import CustomUserCreationForm
 
@@ -27,10 +25,12 @@ def register_view(request):
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():
             form.save()
-            # Redirect to the login page after successful registration
-            return redirect('login')  # Assuming 'login' is the name of your login URL
+            messages.success(request, "Registration successful! Please log in.")
+            return redirect('login')  # Redirect to the login page after successful registration
         else:
+            # Display error messages if form is not valid
+            messages.error(request, "Please fix the errors below.")
             return render(request, 'register.html', {'form': form})
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm()  # Instantiate an empty form for GET request
     return render(request, 'register.html', {'form': form})
