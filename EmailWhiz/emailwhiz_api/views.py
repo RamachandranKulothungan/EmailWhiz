@@ -3,6 +3,7 @@ from django.conf import settings
 from django.core.mail import send_mail
 from django.core.files.storage import FileSystemStorage
 import os
+import json
 
 
 def save_resume(request):
