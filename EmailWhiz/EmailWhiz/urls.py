@@ -16,6 +16,7 @@ Including another URLconf
 """
 from django.contrib import admin
 import  emailwhiz_ui
+import emailwhiz_api
 from django.urls import path, include
 from . import views
 
@@ -24,4 +25,5 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('admin/', admin.site.urls),
     path('ui/', include('emailwhiz_ui.urls')),
+    path('api/', include('emailwhiz_api.urls')),
 ]
