@@ -1,3 +1,4 @@
+
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -5,7 +6,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 
 def add_resume(request):
-    return HttpResponse('Hello, World!')
+    return render(request, 'add_resume.html')
 
 def login_view(request):
     if request.method == "POST":
@@ -45,4 +46,3 @@ def register_view(request):
         return redirect('login')  # Adjust the URL name if needed
     
     return render(request, 'register.html')
-
