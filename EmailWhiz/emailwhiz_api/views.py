@@ -7,6 +7,10 @@ from .forms import ResumeSelectionForm, TemplateSelectionForm
 import os
 
 import google.generativeai as genai
+from django.shortcuts import render
+from django.http import JsonResponse
+from django.core.files.storage import FileSystemStorage
+
 
 genai.configure(api_key='AIzaSyDwBGdGTwqP05cx5GdvuQeZ-F9whEQr1uA')
 
@@ -71,6 +75,37 @@ def get_template(details):
     senders_name=details["senders_name"],
     graduation_complete_boolean=details['graduation_complete_boolean'],
     degree_name=details["degree_name"])
+
+
+
+
+
+
+
+
+def save_resume(request):
+    if request.method == 'POST':
+        file_name = request.POST.get('file_name')
+        uploaded_file = request.FILES.get('file')
+        details= {}
+        details['email'] = 'bhuvanthirwani@gmail.com'
+        if uploaded_file:
+            upload_dir = os.path.join(settings.MEDIA_ROOT, f'{details["email"]}/resumes')
+            if not os.path.exists(upload_dir):
+                os.makedirs(upload_dir)
+            
+            fs = FileSystemStorage(location=upload_dir)
+            saved_file_name = file_name if file_name else uploaded_file.name
+            saved_file_path = fs.save(f'{saved_file_name}.pdf', uploaded_file)
+
+            return  render(request, 'base.html')
+
+        return JsonResponse({'error': 'No file uploaded'}, status=400)
+    
+    return JsonResponse({'error': 'Invalid request method'}, status=405)
+
+
+
 def list_resumes(request, user):
     print("G1")
     user_resumes = os.listdir(f"/users/{user}/resumes")
@@ -84,22 +119,23 @@ def list_resumes(request, user):
         form = ResumeSelectionForm(user_resumes=user_resumes)
     return render(request, 'myapp/list_resumes.html', {'form': form})
 
-def select_template(request, user):
-    email_type = request.POST.get("template_type", "")
-    user_templates = os.listdir(f"/users/{user}/templates/{email_type}")
-    if request.method == "POST":
-        form = TemplateSelectionForm(request.POST, templates=user_templates)
-        if form.is_valid():
-            if form.cleaned_data['use_gemini']:
-                # Call Gemini API here and save template choice
-                pass
-            else:
-                selected_template = form.cleaned_data['template_choice']
-                request.session['selected_template'] = selected_template
-            return redirect('upload_excel', user=user)
-    else:
-        form = TemplateSelectionForm(templates=user_templates)
-    return render(request, 'myapp/select_template.html', {'form': form})
+# def select_template(request, user):
+#     email_type = request.POST.get("template_type", "")
+#     user_templates = os.listdir(f"/users/{user}/templates/{email_type}")
+#     if request.method == "POST":
+#         form = TemplateSelectionForm(request.POST, templates=user_templates)
+#         if form.is_valid():
+#             if form.cleaned_data['use_gemini']:
+#                 # Call Gemini API here and save template choice
+#                 pass
+#             else:
+#                 selected_template = form.cleaned_data['template_choice']
+#                 request.session['selected_template'] = selected_template
+#             return redirect('upload_excel', user=user)
+#     else:
+#         form = TemplateSelectionForm(templates=user_templates)
+#     return render(request, 'myapp/select_template.html', {'form': form})
+
 
 def upload_excel(request, user):
     if request.method == "POST":
@@ -172,8 +208,6 @@ def call_gemini_api(prompt):
     )
 
     response = chat_session.send_message(prompt)
-
-
     return response
 
 def send_email(request):

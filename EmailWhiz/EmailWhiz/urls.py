@@ -9,16 +9,14 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.urls import path, include
 from emailwhiz_ui.views import register_view
+
 urlpatterns = [
+
     path('admin/', admin.site.urls),
-    path('', ui_views.home, name='home'),
-    path('list-resumes/', ui_views.list_resumes, name='list_resumes'),
-    path('select-template/', ui_views.select_template, name='select_template'),
-    path('upload-excel/', ui_views.upload_excel, name='upload_excel'),
-    path('preview-template/', ui_views.preview_template, name='preview_template'),
-    # path('', include('emailwhiz_ui.urls')),
+    
+    path('api/', include('emailwhiz_api.urls')),
     path('generate_template/', views.generate_template, name='generate_template'),
-    path('send_email/', views.send_email, name='send_email')
+    path('send_email/', views.send_email, name='send_email'),
     path('ui/', include('emailwhiz_ui.urls')),
     path('', lambda request: redirect('login')),
     path('register/', register_view, name='register')

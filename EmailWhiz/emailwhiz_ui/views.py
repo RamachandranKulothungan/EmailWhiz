@@ -13,6 +13,23 @@ from django.contrib.auth.models import User
 
 from emailwhiz_ui.forms import CustomUserCreationForm
 
+def view_user_details(request):
+    details = {
+        'first_name': 'John',
+        'last_name': 'Doe',
+        'university': 'SUNY Buffalo',
+        'email': 'bhuvanthirwani@gmail.com',
+        'linkedin_profile': 'https://linkedin.com/in/johndoe',
+        'phone_number': '+1234567890',
+        'graduation_done': 'Yes',
+        'degree_name': 'Master of Science in Computer Science'
+    }
+    resumes_dir = os.path.join(settings.BASE_DIR, 'emailwhiz_api', 'users', details['email'], 'resumes')
+    print("resume_dir: ", resumes_dir, settings.BASE_DIR)
+    resumes = [f for f in os.listdir(resumes_dir) if f.endswith('.pdf')]
+    print("resumes: ", resumes)
+    return render(request, 'view_user_details.html', {'details': details,  'user_email': details['email'],  'resumes': resumes})
+
 def home(request):
     return render(request, 'base.html')
 
@@ -72,7 +89,7 @@ def generate_template(request):
 
 
 def add_resume(request):
-    return HttpResponse('Hello, World!')
+    return render(request, 'add_resume.html')
 
 def login_view(request):
     if request.method == "POST":
