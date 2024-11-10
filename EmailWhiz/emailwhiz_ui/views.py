@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
-
+import json
 from emailwhiz_ui.forms import CustomUserCreationForm
 
 def add_resume(request):
@@ -34,3 +34,9 @@ def register_view(request):
     else:
         form = CustomUserCreationForm()  # Instantiate an empty form for GET request
     return render(request, 'register.html', {'form': form})
+
+def add_employer_details(request):
+    # body = json.loads(request.body)
+    body = {"resume": "abcd"}
+    return render(request, 'email_generator.html', body)
+
