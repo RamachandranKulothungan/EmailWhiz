@@ -54,6 +54,14 @@ def generate_emails(request):
                 "degree":"asda"
             }
 
+            emp_data = {
+                'first_name': first_name,
+                'last_name': last_name,
+                'recruiter_email': recruiter_email,
+                'target_company': company,
+                'target_role': job_role
+            }
+
             # Collecting data into a dictionary
             employer_data = {
                 'recruiter_name': first_name + " "+ last_name,
@@ -81,8 +89,8 @@ def generate_emails(request):
             # Call Gemini API
             # response = call_gemini_api(prompt)
             response = "email content"
-            employer_data["email_content"] = response
-            data.append(employer_data)
+            emp_data["email_content"] = response
+            data.append(emp_data)
             # print("Response: ", response)
             # if response:
             #     template_text = response.text
@@ -90,7 +98,7 @@ def generate_emails(request):
             # else:
             #     return render(request, 'generated_template.html', {'error': "Failed to generate template."})
         print(data)
-        return redirect("view_generated_emails", data=data)
+        return render(request, "view_generated_emails.html", {"data":data})
 
 
         # Placeholder: Handle the data (e.g., generate emails)
