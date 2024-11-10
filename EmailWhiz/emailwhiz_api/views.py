@@ -1,3 +1,5 @@
+from django.shortcuts import render
+from django.http import HttpResponse
 from PyPDF2 import PdfReader
 from django.conf import settings
 from django.shortcuts import render, redirect
@@ -176,3 +178,4 @@ def call_gemini_api(prompt):
 
 def send_email(request):
     return "Mail Sent"
+

@@ -38,6 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'emailwhiz_ui',
+    'emailwhiz_api'
 ]
 
 MIDDLEWARE = [
@@ -124,8 +126,6 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-
-
 # BASE_DIR_ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Add this configuration for template directories
@@ -148,3 +148,6 @@ TEMPLATES = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'emailwhiz_api', 'users')
+
+LOGIN_REDIRECT_URL = '/ui/add_resume/'  # Replace with the URL or named view where you want to redirect users
+
