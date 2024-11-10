@@ -126,3 +126,5 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_REDIRECT_URL = '/ui/add_resume/'  # Replace with the URL or named view where you want to redirect users
+
+AUTH_USER_MODEL = 'emailwhiz_ui.CustomUser'

@@ -18,9 +18,6 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path, include
 from emailwhiz_ui.views import register_view
-import  emailwhiz_ui
-import emailwhiz_api
-from . import views
 
 urlpatterns = [
     path('', lambda request: redirect('login')),
