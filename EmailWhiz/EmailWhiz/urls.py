@@ -18,10 +18,14 @@ from django.contrib import admin
 from django.shortcuts import redirect
 from django.urls import path, include
 from emailwhiz_ui.views import register_view
+import  emailwhiz_ui
+import emailwhiz_api
+from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('ui/', include('emailwhiz_ui.urls')),
     path('', lambda request: redirect('login')),
-    path('register/', register_view, name='register')
+    path('admin/', admin.site.urls),
+    path('ui/', include('emailwhiz_ui.urls')),    
+    path('register/', register_view, name='register'),
+    path('api/', include('emailwhiz_api.urls')),
 ]
