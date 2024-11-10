@@ -1,22 +1,20 @@
-"""
-URL configuration for EmailWhiz project.
 
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
+
+from emailwhiz_api import views as views
+from emailwhiz_ui import views as ui_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-]
+    path('', ui_views.home, name='home'),
+    path('list-resumes/', ui_views.list_resumes, name='list_resumes'),
+    path('select-template/', ui_views.select_template, name='select_template'),
+    path('upload-excel/', ui_views.upload_excel, name='upload_excel'),
+    path('preview-template/', ui_views.preview_template, name='preview_template'),
+    # path('', include('emailwhiz_ui.urls')),
+    path('generate_template/', views.generate_template, name='generate_template')
+    
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
