@@ -25,10 +25,6 @@ def save_resume(request):
     
     return JsonResponse({'error': 'Invalid request method'}, status=405)
 
-from django.core.mail import send_mail
-from django.http import JsonResponse
-import json
-
 def send_bulk_emails(request):
     if request.method == 'POST':
         data = request.POST.get('data')
