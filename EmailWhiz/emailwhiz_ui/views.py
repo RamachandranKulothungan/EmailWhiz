@@ -1,4 +1,5 @@
 
+from django.http import HttpResponseBadRequest
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login
 from django.contrib import messages
@@ -35,8 +36,29 @@ def register_view(request):
         form = CustomUserCreationForm()  # Instantiate an empty form for GET request
     return render(request, 'register.html', {'form': form})
 
+
 def add_employer_details(request):
-    # body = json.loads(request.body)
-    body = {"resume": "abcd"}
+    resume = request.GET.get('resume')
+    if not resume:
+        # If the parameter is missing, return a 400 Bad Request response
+        return HttpResponseBadRequest('Missing required query parameter: param1')
+
+    body = {"resume": resume}
     return render(request, 'email_generator.html', body)
 
+
+def view_generated_emails(request, data):
+    # body = json.loads(request.body)
+    # print(data)
+    body = {
+        "data": [{
+            "first_name": "firstName",
+            "last_name": "lastName",
+            "email": "email",
+            "company": "company",
+            "job_role": "jobRole",
+            "email_content": "email_content"
+        },
+        ]
+    }
+    return render(request, 'view_generated_emails.html', body)
