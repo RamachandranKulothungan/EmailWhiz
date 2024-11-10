@@ -53,3 +53,13 @@ def preview_template(request, user):
         'template': selected_template,
         'excel_data': excel_data,
     })
+
+
+def generate_template(request):
+    if request.method == 'POST':
+        # (Your existing code to generate the template text)
+        template_text = "Your generated email template content here"  # Example content
+
+        return render(request, 'emailwhiz_ui/generated_template.html', {'template_text': template_text})
+    else:
+        return redirect('list_resumes')

@@ -15,6 +15,8 @@ urlpatterns = [
     path('upload-excel/', ui_views.upload_excel, name='upload_excel'),
     path('preview-template/', ui_views.preview_template, name='preview_template'),
     # path('', include('emailwhiz_ui.urls')),
-    path('generate_template/', views.generate_template, name='generate_template')
+    path('generate_template/', views.generate_template, name='generate_template'),
+    path('send_email/', views.send_email, name='send_email')
+    
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

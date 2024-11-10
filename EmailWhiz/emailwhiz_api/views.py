@@ -23,7 +23,52 @@ model = genai.GenerativeModel(
 )
 
 
+def get_template(details):
+    template = '''Giving you my text of resume.\n
+    {resume} 
+    \n
+    \n
+    I want you to provide me a cold email template mail which I can send to a recruiter.\n
+    For that try to extract details from specific sections of Resume Text  & it should include the following.\n
+    \n
+    1. Extract Skills - Use it in creating template in a separate paragraph.\n
+    2. Template should contain information from work experience as well in a separate paragraph.\n
+    3. Template should include why you are a good fit for the particular role.\n
+    4. Use internet and search the internet about the company and add in the template (40 words) that why the candidate is inspired by the company's info in a separate paragraph.\n
+    5. Add pursuing a degree if graduation done is False, else write completed  graduation: True.\n
+    6. Don't include where I find the opportunity.\n
+    7. The template should not contain [....] like thing. If possible search on internet.\n
+    \n
+    Also use the below critical information:\n
+    \n
+    1.First name of user: {first_name}\n 
+    2. Last Name of user: {last_name}\n 
+    3. University: {university}\n
+    4. Target Company: {target_company}\n 
+    5. Target role: {target_role}\n 
+    6. Email: {email}\n
+    7. Linkedln Profile: {linkedin_url}\n 
+    8. Phone Number: {phone}\n
+    9. Recruiter Name: {senders_name}\n
+    10. Graduation Done: {graduation_complete_boolean}\n
+    11. Degree Name: {degree_name}\n
+    \n
+    \n
+    I just want the body of the generated email template in response from your side as I want to use this in an API, so please give me only the body (without subject) in HTML. Please make sure to stick to the first 7 points & use the information from the critical information.'''
 
+    return template.format(
+    resume=details["resume"],
+    first_name=details['first_name'],
+    last_name=details["last_name"],
+   university=details["university"],
+    target_company=details['target_company'],
+    target_role=details["target_role"],
+    email=details["email"],
+    linkedin_url=details['linkedin_url'],
+    phone=details["phone"],
+    senders_name=details["senders_name"],
+    graduation_complete_boolean=details['graduation_complete_boolean'],
+    degree_name=details["degree_name"])
 def list_resumes(request, user):
     print("G1")
     user_resumes = os.listdir(f"/users/{user}/resumes")
@@ -84,18 +129,20 @@ def generate_template(request):
         print("Resume_PATH: ", resume_path)
         # Extract text from the selected resume
         extracted_text = extract_text_from_pdf(resume_path)
-        
+        print("extracted_text: ", extracted_text)
         # Create prompt for Gemini
-        prompt = f"Giving you my text of resume:\n{extracted_text}\n\nI want you to provide me a cold email template mail which I can send to a recruiter."
+        details = {}
+        details['resume'] = extracted_text
+        prompt = get_template(details)
         
         # Call Gemini API
         response = call_gemini_api(prompt)
         print("Response: ", response)
-        if response.status_code == 200:
-            template_text = response.json().get("generated_template", "No template found.")
-            return render(request, 'emailwhiz_ui/generated_template.html', {'template_text': template_text})
+        if response:
+            template_text = response.text
+            return render(request, 'generated_template.html', {'template_text': template_text})
         else:
-            return render(request, 'emailwhiz_ui/generated_template.html', {'error': "Failed to generate template."})
+            return render(request, 'generated_template.html', {'error': "Failed to generate template."})
     else:
         return redirect('list_resumes')
 
@@ -124,6 +171,8 @@ def call_gemini_api(prompt):
 
     response = chat_session.send_message(prompt)
 
-    print("response.text", response.text)
 
-    return "Hello"
+    return response
+
+def send_email(request):
+    return "Mail Sent"
